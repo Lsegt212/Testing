@@ -173,6 +173,7 @@ public class Robot extends IterativeRobot {
 		if(oi.xbox.getRawAxis(2) > 0.1) {
 			RopeClimb.set(oi.xbox.getRawAxis(2));
 		}
+		else RopeClimb.set(0);
 		}
 		
 	
