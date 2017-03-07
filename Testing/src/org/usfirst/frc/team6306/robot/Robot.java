@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6306.robot.commands.ExampleCommand;
 import org.usfirst.frc.team6306.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,11 +23,21 @@ import edu.wpi.first.wpilibj.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	Spark RopeClimb;
+	public final int STATE_0 = 0;
+	public final int STATE_1= 1;
+	public final int STATE_2 = 2;
+	public final int STATE_3 = 3;
 
+	private int state = STATE_0;
+	private boolean TRIGGERED = false;
+	
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	RobotDrive myRobot = new RobotDrive(1,2);
 	Command autonomousCommand;
+	Joystick stick = new Joystick(1);
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	Timer timer = new Timer();
 	
@@ -40,6 +51,7 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		RopeClimb = new Spark(6);	
 	}
 
 	/**
@@ -91,12 +103,54 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		if(timer.get() < 5.0) {
+		/**if(timer.get() < 5.0) {
 			myRobot.drive(-0.1, 0.0);
 		} else if(timer.get() > 5.2){
 			myRobot.drive(0.1, 0.1);
 		} else if(timer.get() == 6.0){
 			myRobot.drive(0.0, 0.0);
+		}*/ 
+		
+		if(state == STATE_0) {
+			if(!TRIGGERED) {
+				timer.start();
+				TRIGGERED = true;
+			}
+			
+			myRobot.arcadeDrive(0.7,0);
+			
+			if(timer.get() >= 3) {
+				TRIGGERED = false;
+				state++;
+			}
+		}
+		
+		if(state == STATE_1) {
+			if(!TRIGGERED) {
+				timer.start();
+				TRIGGERED = true;
+			}
+			
+			myRobot.arcadeDrive(0, 0.7);
+			
+			if(timer.get() >= .5) {
+				TRIGGERED = false;
+				state++;
+			}
+		}
+		
+		if(state == STATE_2) {
+			if(!TRIGGERED) {
+				timer.start();
+				TRIGGERED = true;
+			}
+		}
+		
+		if(state == STATE_1) {
+			if(!TRIGGERED) {
+				timer.start();
+				TRIGGERED = true;
+			}
 		}
 	}
 
@@ -115,9 +169,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-		myRobot.arcadeDrive(1, 3, true);
-	}
+		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4));
+		if(oi.xbox.getRawAxis(2) > 0.1) {
+			RopeClimb.set(oi.xbox.getRawAxis(2));
+		}
+		}
+		
+	
 
 	/**
 	 * This function is called periodically during test mode

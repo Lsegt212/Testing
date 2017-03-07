@@ -39,7 +39,7 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
-	Joystick xbox  = new Joystick(0); //X-Box controller put on port 0
+	Joystick xbox  = new Joystick(1); //X-Box controller put on port 0
 	Button button1 = new JoystickButton(xbox, 1), // Button 1 is LeftX
 	       button2 = new JoystickButton(xbox, 2), // Button 2 is LeftY
 	       button3 = new JoystickButton(xbox, 4), // Button 3 is RightX
