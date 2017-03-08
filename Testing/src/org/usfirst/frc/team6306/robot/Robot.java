@@ -26,6 +26,7 @@ public class Robot extends IterativeRobot {
 	
 	Spark RopeClimb; // Motor for the Rope Climb, it's a spark motor
 	Spark BallSweep; // Motor for the Ball Sweep, it's a spark motor
+	Spark BallShoot; // Motor for the Ball Shoot, it's a spark motor
 	public final int STATE_0 = 0; // First state the robot is in for autonomous
 	public final int STATE_1= 1; // Second state the robot is in for autonomous
 	public final int STATE_2 = 2; // Third state the robot is in for autonomous
@@ -54,6 +55,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", chooser);
 		RopeClimb = new Spark(5); // Plug Rope Climb into port 5
 		BallSweep = new Spark(6); // Plug Ball Sweep into port 6
+		BallShoot = new Spark(7); // Plug Ball Shoot into port 7
 	}
 
 	/**
@@ -182,6 +184,11 @@ public class Robot extends IterativeRobot {
 			BallSweep.set(oi.xbox.getRawAxis(3)); // Starts the Ball Sweep
 		}
 		else BallSweep.set(0); // Ends the Ball Sweep 
+		
+		if(oi.xbox.getRawButton(3)) {
+			BallShoot.set(1);
+		}
+		else BallShoot.set(0);
 	}
 		
 	
