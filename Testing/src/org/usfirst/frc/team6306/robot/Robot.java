@@ -186,7 +186,7 @@ public class Robot extends IterativeRobot {
 		else BallSweep.set(0); // Ends the Ball Sweep 
 		
 		if(oi.xbox.getRawButton(3)) {
-			BallShoot.set(1);
+			BallShoot.set(3);
 		}
 		else BallShoot.set(0);
 	}
