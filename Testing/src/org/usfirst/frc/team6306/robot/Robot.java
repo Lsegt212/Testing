@@ -173,7 +173,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4), true); // Makes the robot move
+		myRobot.arcadeDrive(oi.xbox.getRawAxis(-1), oi.xbox.getRawAxis(-4), true); // Makes the robot move
 		
 		if(oi.xbox.getRawAxis(2) > 0.1) {
 			RopeClimb.set(oi.xbox.getRawAxis(2)); // Starts the Rope Climb
