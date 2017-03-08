@@ -24,22 +24,23 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
  */
 public class Robot extends IterativeRobot {
 	
-	Spark RopeClimb;
-	public final int STATE_0 = 0;
-	public final int STATE_1= 1;
-	public final int STATE_2 = 2;
-	public final int STATE_3 = 3;
+	Spark RopeClimb; // Motor for the Rope Climb, it's a spark motor
+	Spark BallSweep; // Motor for the Ball Sweep, it's a spark motor
+	public final int STATE_0 = 0; // First state the robot is in for autonomous
+	public final int STATE_1= 1; // Second state the robot is in for autonomous
+	public final int STATE_2 = 2; // Third state the robot is in for autonomous
+	public final int STATE_3 = 3; // Fourth state the robot is in for autonomous
 
-	private int state = STATE_0;
+	private int state = STATE_0; 
 	private boolean TRIGGERED = false;
 	
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	RobotDrive myRobot = new RobotDrive(1,2);
 	Command autonomousCommand;
-	Joystick stick = new Joystick(1);
+	Joystick stick = new Joystick(0); // Joystick in port 0
 	SendableChooser<Command> chooser = new SendableChooser<>();
-	Timer timer = new Timer();
+	Timer timer = new Timer(); 
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -51,7 +52,8 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		RopeClimb = new Spark(6);	
+		RopeClimb = new Spark(5); // Plug Rope Climb into port 5
+		BallSweep = new Spark(6); // Plug Ball Sweep into port 6
 	}
 
 	/**
@@ -102,22 +104,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
-		/**if(timer.get() < 5.0) {
-			myRobot.drive(-0.1, 0.0);
-		} else if(timer.get() > 5.2){
-			myRobot.drive(0.1, 0.1);
-		} else if(timer.get() == 6.0){
-			myRobot.drive(0.0, 0.0);
-		}*/ 
-		
+		Scheduler.getInstance().run();	
 		if(state == STATE_0) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0.7,0);
+			myRobot.arcadeDrive(0.7,0); // Moves the robot forward for 3 seconds
 			
 			if(timer.get() >= 3) {
 				TRIGGERED = false;
@@ -131,9 +125,9 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0, 0.7);
+			myRobot.arcadeDrive(0, 0.7); // Turns the robot for 0.5 seconds
 			
-			if(timer.get() >= .5) {
+			if(timer.get() >= .7) {
 				TRIGGERED = false;
 				state++;
 			}
@@ -144,9 +138,17 @@ public class Robot extends IterativeRobot {
 				timer.start();
 				TRIGGERED = true;
 			}
+			
+			myRobot.arcadeDrive(0.7, 0); // Has the robot return to starting position for 3 seconds
+			
+			if(timer.get() >= 3) {
+				TRIGGERED = false;
+				state++;
+			}
+			
 		}
 		
-		if(state == STATE_1) {
+		if(state == STATE_3) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
@@ -169,12 +171,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4));
+		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4), true); // Makes the robot move
+		
 		if(oi.xbox.getRawAxis(2) > 0.1) {
-			RopeClimb.set(oi.xbox.getRawAxis(2));
+			RopeClimb.set(oi.xbox.getRawAxis(2)); // Starts the Rope Climb
 		}
-		else RopeClimb.set(0);
+		else RopeClimb.set(0); // Ends the Rope Climb
+		
+		if(oi.xbox.getRawAxis(3) > 0.1) {
+			BallSweep.set(oi.xbox.getRawAxis(3)); // Starts the Ball Sweep
 		}
+		else BallSweep.set(0); // Ends the Ball Sweep 
+	}
 		
 	
 
