@@ -24,9 +24,8 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
  */
 public class Robot extends IterativeRobot {
 	
-	Spark RopeClimb; // Motor for the Rope Climb, it's a spark motor
-	Spark BallSweep; // Motor for the Ball Sweep, it's a spark motor
-	Spark BallShoot; // Motor for the Ball Shoot, it's a spark motor
+	Victor RopeClimb; // Motor for the Rope Climb, it's a victor motor
+	Victor BallShoot; // Motor for the Ball Shoot, it's a victor motor
 	public final int STATE_0 = 0; // First state the robot is in for autonomous
 	public final int STATE_1= 1; // Second state the robot is in for autonomous
 	public final int STATE_2 = 2; // Third state the robot is in for autonomous
@@ -39,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	RobotDrive myRobot = new RobotDrive(1,2);
 	Command autonomousCommand;
-	Joystick stick = new Joystick(0); // Joystick in port 0
+	Joystick stick = new Joystick(1); // Joystick in port 0
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	Timer timer = new Timer(); 
 	
@@ -53,9 +52,9 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		RopeClimb = new Spark(5); // Plug Rope Climb into port 5
-		BallSweep = new Spark(6); // Plug Ball Sweep into port 6
-		BallShoot = new Spark(7); // Plug Ball Shoot into port 7
+		RopeClimb = new Victor(5); // Plug Rope Climb into port 5
+		BallShoot = new Victor(6); // Plug Ball Shoot into port 6
+	
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0.7,0); // Moves the robot forward for 3 seconds
+			myRobot.arcadeDrive(0.6,0); // Moves the robot forward for 3 seconds
 			
 			if(timer.get() >= 3) {
 				TRIGGERED = false;
@@ -127,7 +126,7 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0, 0.7); // Turns the robot for 0.5 seconds
+			myRobot.arcadeDrive(0, 0.9); // Turns the robot for 0.7 seconds
 			
 			if(timer.get() >= .7) {
 				TRIGGERED = false;
@@ -173,17 +172,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(oi.xbox.getRawAxis(-1), oi.xbox.getRawAxis(-4), true); // Makes the robot move
+		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4), true); // Makes the robot move
 		
 		if(oi.xbox.getRawAxis(2) > 0.1) {
 			RopeClimb.set(oi.xbox.getRawAxis(2)); // Starts the Rope Climb
 		}
 		else RopeClimb.set(0); // Ends the Rope Climb
-		
-		if(oi.xbox.getRawAxis(3) > 0.1) {
-			BallSweep.set(oi.xbox.getRawAxis(3)); // Starts the Ball Sweep
-		}
-		else BallSweep.set(0); // Ends the Ball Sweep 
 		
 		if(oi.xbox.getRawButton(3)) {
 			BallShoot.set(3);
