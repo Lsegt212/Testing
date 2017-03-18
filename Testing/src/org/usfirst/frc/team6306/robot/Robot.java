@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class Robot extends IterativeRobot {
 	
 	Victor RopeClimb; // Motor for the Rope Climb, it's a victor motor
-	Victor BallShoot; // Motor for the Ball Shoot, it's a victor motor
+	Victor RopeClimb2; // Motor for the Ball Shoot, it's a victor motor
 	public final int STATE_0 = 0; // First state the robot is in for autonomous
 	public final int STATE_1= 1; // Second state the robot is in for autonomous
 	public final int STATE_2 = 2; // Third state the robot is in for autonomous
@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	RobotDrive myRobot = new RobotDrive(1,2);
 	Command autonomousCommand;
-	Joystick stick = new Joystick(1); // Joystick in port 0
+	Joystick stick = new Joystick(1); // Joystick in port 1
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	Timer timer = new Timer(); 
 	
@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		RopeClimb = new Victor(5); // Plug Rope Climb into port 5
-		BallShoot = new Victor(6); // Plug Ball Shoot into port 6
+		RopeClimb2 = new Victor(6); // Plug Ball Shoot into port 6
 	
 	}
 
@@ -120,7 +120,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		
-		if(state == STATE_1) {
+	/*	if(state == STATE_1) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
@@ -154,7 +154,7 @@ public class Robot extends IterativeRobot {
 				timer.start();
 				TRIGGERED = true;
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -179,10 +179,10 @@ public class Robot extends IterativeRobot {
 		}
 		else RopeClimb.set(0); // Ends the Rope Climb
 		
-		if(oi.xbox.getRawButton(3)) {
-			BallShoot.set(3);
+		if(oi.xbox.getRawAxis(3) > 0.1) {
+			RopeClimb2.set(3);
 		}
-		else BallShoot.set(0);
+		else RopeClimb2.set(0);
 	}
 		
 	
