@@ -36,11 +36,13 @@ public class Robot extends IterativeRobot {
 	
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-	RobotDrive myRobot = new RobotDrive(1,2);
+	//RobotDrive myRobot = new RobotDrive(1,2,3,4);
 	Command autonomousCommand;
 	Joystick stick = new Joystick(1); // Joystick in port 1
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	Timer timer = new Timer(); 
+	
+	Spark r1, r2, l1, l2;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -54,7 +56,10 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", chooser);
 		RopeClimb = new Victor(5); // Plug Rope Climb into port 5
 		RopeClimb2 = new Victor(6); // Plug Ball Shoot into port 6
-	
+		r1 = new Spark(4);
+		r2 = new Spark(2);
+		l1 = new Spark(3);
+		l2 = new Spark(1);
 	}
 
 	/**
@@ -112,11 +117,11 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0.6,0); // Moves the robot forward for 3 seconds
+			arcade(0.5,0); // Moves the robot forward for 3 seconds
 			
 			if(timer.get() >= 3) {
 				TRIGGERED = false;
-				state++;
+				
 			}
 		}
 		
@@ -165,15 +170,16 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
-	}
+	    }
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4), true); // Makes the robot move
+		//myRobot.arcadeDrive(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4)); // Makes the robot move
 		
+		arcade(oi.xbox.getRawAxis(1), oi.xbox.getRawAxis(4));
 		if(oi.xbox.getRawAxis(2) > 0.1) {
 			RopeClimb.set(oi.xbox.getRawAxis(2)); // Starts the Rope Climb
 		}
@@ -193,5 +199,56 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
+	}
+	
+	
+	public void tank(double right, double left, double diff) {
+		
+		double aLeft = -left;
+		double aRight = right;
+		
+		if((left/Math.abs(left)) == (right/Math.abs(right))) {
+			if(Math.abs(left - right) < diff) {
+				aLeft = -(right + left) / 2;
+				aRight = (right + left) / 2;
+			}
+		}
+		
+		if (Math.abs(right) > .15) {
+			r1.set(-aRight);
+			r2.set(aRight);
+		}
+		else {
+			r1.set(0);
+			r2.set(0);
+		}
+		
+		if (Math.abs(left) > .15) {
+			l1.set(-aLeft);
+			l2.set(aLeft);
+		}
+		else {
+			l1.set(0);
+			l2.set(0);
+		}
+	}
+	
+	public void arcade(double fwd, double turn) {
+		double afwd = 0;
+		double aturn = 0;
+		
+		if (Math.abs(fwd) > .15) {
+			afwd = fwd;
+		}
+		if (Math.abs(turn) > .15) {
+			aturn = turn;
+		}
+			r1.set(afwd + aturn);
+			r2.set(-afwd - aturn);
+			l1.set(-afwd + aturn);
+			l2.set(afwd - aturn);
+			
+			
+		
 	}
 }
