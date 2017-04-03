@@ -3,7 +3,6 @@ package org.usfirst.frc.team6306.robot;
 
 
 
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -54,6 +53,7 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		CameraServer.getInstance().startAutomaticCapture();
 		RopeClimb = new Victor(5); // Plug Rope Climb into port 5
 		RopeClimb2 = new Victor(6); // Plug Ball Shoot into port 6
 		r1 = new Spark(4);
@@ -117,21 +117,22 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			arcade(0.5,0); // Moves the robot forward for 3 seconds
+			arcade(0.7,0); // Moves the robot forward for 1 second(s)
 			
-			if(timer.get() >= 3) {
+			if(timer.get() >= 1) {
 				TRIGGERED = false;
+				state ++;
 				
 			}
 		}
 		
-	/*	if(state == STATE_1) {
+		if(state == STATE_1) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0, 0.9); // Turns the robot for 0.7 seconds
+			arcade(0, 0); // Turns the robot for 0.7 seconds
 			
 			if(timer.get() >= .7) {
 				TRIGGERED = false;
@@ -139,7 +140,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		
-		if(state == STATE_2) {
+		/*	if(state == STATE_2) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
@@ -244,7 +245,7 @@ public class Robot extends IterativeRobot {
 			aturn = turn;
 		}
 			r1.set(afwd + aturn);
-			r2.set(-afwd - aturn);
+			r2.set(-afwd - aturn); 
 			l1.set(-afwd + aturn);
 			l2.set(afwd - aturn);
 			
