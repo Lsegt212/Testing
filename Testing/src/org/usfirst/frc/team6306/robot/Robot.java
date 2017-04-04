@@ -248,8 +248,5 @@ public class Robot extends IterativeRobot {
 			r2.set(-afwd - aturn); 
 			l1.set(-afwd + aturn);
 			l2.set(afwd - aturn);
-			
-			
-		
 	}
 }
