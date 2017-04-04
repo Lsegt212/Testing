@@ -60,6 +60,9 @@ public class Robot extends IterativeRobot {
 		r2 = new Spark(2);
 		l1 = new Spark(3);
 		l2 = new Spark(1);
+		
+		timer.reset();
+		state = STATE_0;
 	}
 
 	/**
@@ -93,6 +96,7 @@ public class Robot extends IterativeRobot {
 		autonomousCommand = chooser.getSelected();
 		timer.reset();
 		timer.start();
+		state = STATE_0;
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
