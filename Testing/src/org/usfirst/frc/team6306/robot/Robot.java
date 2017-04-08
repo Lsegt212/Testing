@@ -95,6 +95,10 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 		timer.reset();
+		/*if(Timer.getMatchTime() < 1.5) {
+			arcade(0.7, 0);
+			
+		}*/
 		timer.start();
 		state = STATE_0;
 		/*
@@ -123,10 +127,10 @@ public class Robot extends IterativeRobot {
 			
 			arcade(0.7,0); // Moves the robot forward for 1 second(s)
 			
-			if(timer.get() >= 1) {
+			if(timer.get() >= 1.0) {
 				TRIGGERED = false;
 				state ++;
-				
+			
 			}
 		}
 		
@@ -136,23 +140,23 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			arcade(0, 0); // Turns the robot for 0.7 seconds
+			arcade(0, 0.3); // Placeholder
 			
-			if(timer.get() >= .7) {
+			if(timer.get() >= 0.3) {
 				TRIGGERED = false;
 				state++;
 			}
 		}
 		
-		/*	if(state == STATE_2) {
+			if(state == STATE_2) {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
 			}
 			
-			myRobot.arcadeDrive(0.7, 0); // Has the robot return to starting position for 3 seconds
+			arcade(0.7, 0); // 
 			
-			if(timer.get() >= 3) {
+			if(timer.get() >= 1) {
 				TRIGGERED = false;
 				state++;
 			}
@@ -163,8 +167,15 @@ public class Robot extends IterativeRobot {
 			if(!TRIGGERED) {
 				timer.start();
 				TRIGGERED = true;
+			} 
+			
+			arcade(0,0);
+			
+			if(timer.get() >= 0.3) {
+				TRIGGERED = false;
+				state ++;
 			}
-		}*/
+		}
 	}
 
 	@Override
@@ -242,15 +253,15 @@ public class Robot extends IterativeRobot {
 		double afwd = 0;
 		double aturn = 0;
 		
-		if (Math.abs(fwd) > .15) {
+		if (Math.abs(fwd) > .25) {
 			afwd = fwd;
 		}
-		if (Math.abs(turn) > .15) {
+		if (Math.abs(turn) > .25) {
 			aturn = turn;
 		}
 			r1.set(afwd + aturn);
-			r2.set(-afwd - aturn); 
+			r2.set(-afwd + aturn); 
 			l1.set(-afwd + aturn);
-			l2.set(afwd - aturn);
+			l2.set(afwd + aturn);
 	}
 }
