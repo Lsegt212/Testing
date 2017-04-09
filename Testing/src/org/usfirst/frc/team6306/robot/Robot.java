@@ -140,7 +140,7 @@ public class Robot extends IterativeRobot {
 				TRIGGERED = true;
 			}
 			
-			arcade(0, 0.3); // Placeholder
+			arcade(0, -0.3); // Placeholder
 			
 			if(timer.get() >= 0.3) {
 				TRIGGERED = false;
